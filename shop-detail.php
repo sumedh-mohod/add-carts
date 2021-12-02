@@ -93,7 +93,10 @@ $products = $stmt->fetch();
 						<div class="quantity-product">
 							<label class="quantity">Qty:</label>
 							<input type="number"  name="quantity"value="1" min="0" max="10">
-							<a href="cart.php" id="addcart" class="add-cart"><i class="fa fa-shopping-bag" aria-hidden="true"></i> Add to cart</a>
+							
+							<!-- new button -->
+                            <a href="cart.php" class="add-cart" data-product="<?php echo $product['id']?>"><i class="fa fa-shopping-bag" aria-hidden="true"></i> Add to cart</a>
+
 						</div>
 						<div class="wiselist">
 							<ul class="compare">
@@ -117,184 +120,11 @@ $products = $stmt->fetch();
 
 		</div>
 	</section>
-	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-	<script>
-        var queryString = window.location.search;
-        var urlParams = new URLSearchParams(queryString);
-        var id = urlParams.get('id');
-        var isInsert = true;
-		if (id) {
-            axios.get('get-cart.php', {
-                params: {
-                    id: id
-                }
-            }).then(function(response) {
-                console.log(response.data);
-                document.getElementsByName('name')[0].value = response.data.name;
-                document.getElementsByName('quantity')[0].value = response.data.quantity;
-                document.getElementsByName('price')[0].value = response.data.price;
-            }).catch(function(error) {
-                console.log(error);
-                alert(error);
-            });
-            isInsert = false;
-        }
-       
-        document.getElementById("addcart").addEventListener("click", function(event) {
-            event.preventDefault();
-            
-                axios.post('cart.php', {
-                        name: document.getElementsByName('name')[0].innerHTML,
-                        quantity: document.getElementsByName('quantity')[0].value,
-                        price: document.getElementsByName('price')[0].innerHTML,
-                    })
-                    .then(function(response) {
-                        console.log(response.data);
-                        alert('data inserted - '+ response.data);
-                    })
-                    .catch(function(error) {
-                        console.log(error);
-                        alert('error');
-                    });
-             } );
-    </script>
-	<section class="desc-tabbing pt-100">
-		<div class="container">
-			<div class="row">
-				<div class="col-xl-12 col-lg-12 col-md-12">
-					<div class="border-tab">
-						<ul class="panel-tab">
-							<li class="tab-link current" data-tab="tab-1"><a href="javascript:void(0)">Description</a></li>
-							<li class="tab-link" data-tab="tab-3"><a href="javascript:void(0)">Reviews</a></li>
-						</ul>
-						<div class="product-desc-tab current" id="tab-1">
-							<p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo. tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. </p>
-							<p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.</p>
-						</div>
-						<div class="product-desc-tab" id="tab-3">
-							<div class="comment-part">
-								<h3>03 COMMENTS</h3>
-								<ul>
-									<li>
-										<!-- <div class="comment-user">
-											<img src="images/comment-img1.jpg" alt="comment-img">
-										</div> -->
-										<div class="comment-detail">
-											<span class="commenter">
-												<span>John Doe</span> (05 Jan 2020)
-											</span>
-											<p>Lorem ipsum dolor sit amet adipiscing elit labore dolore that sed do eiusmod tempor labore dolore that magna aliqua. Ut enim ad minim veniam, exercitation.</p>
-											<a href="#" class="reply-btn btn btn-color small">Reply</a>
-										</div>
-										<div class="clearfix"></div>
-									</li>
-									<li>
-										<ul>
-											<li>
-												<!-- <div class="comment-user">
-													<img src="images/comment-img2.jpg" alt="comment-img">
-												</div> -->
-												<div class="comment-detail">
-													<span class="commenter">
-														<span>John Doe</span> (12 Jan 2020)
-													</span>
-													<p>Lorem ipsum dolor sit amet adipiscing elit labore dolore that sed do eiusmod tempor labore dolore that magna aliqua. Ut enim ad minim veniam, exercitation.</p>
-													<a href="#" class="reply-btn btn btn-color small">Reply</a>
-												</div>
-												<div class="clearfix"></div>
-											</li>
-											<li>
-												<!-- <div class="comment-user">
-													<img src="images/comment-img3.jpg" alt="comment-img">
-												</div> -->
-												<div class="comment-detail">
-													<span class="commenter">
-														<span>John Doe</span> (15 Jan 2020)
-													</span>
-													<p>Lorem ipsum dolor sit amet adipiscing elit labore dolore that sed do eiusmod tempor labore dolore that magna aliqua. Ut enim ad minim veniam, exercitation.</p>
-													<a href="#" class="reply-btn btn btn-color small">Reply</a>
-												</div>
-												<div class="clearfix"></div>
-											</li>
-										</ul>
-									</li>
-								</ul>
-							</div>
-							<div class="leave-comment-part pt-100">
-								<h3 class="reviews-head mb-30">Leave A Comment</h3>
-								<form class="main-form">
-									<div class="row">
-										<div class="col-md-4">
-											<div class="form-group">
-												<input type="text" class="form-control" placeholder="Name" required="">
-											</div>
-										</div>
-										<div class="col-md-4">
-											<div class="form-group">
-												<input type="text" class="form-control" placeholder="Subject" required="">
-											</div>
-										</div>
-										<div class="col-md-4">
-											<div class="form-group">
-												<input type="text" class="form-control" placeholder="Email" required="">
-											</div>
-										</div>
-										<div class="col-12">
-											<div class="form-group">
-												<textarea class="form-control" placeholder="Message" rows="8"></textarea>
-											</div>
-										</div>
-										<div class="col-12">
-											<button type="submit" class="btn post-comm">Post Comment</button>
-										</div>
-									</div>
-								</form>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
-
-	<section class="releted-product special-menu pt-100 pb-100">
-		<div class="container">
-			<div class="row">
-				<div class="col-xl-12 col-lg-12 col-md-12">
-					<div class="headding-part text-center pb-50">
-						<p class="headding-sub">Fresh From Pizzon</p>
-						<h2 class="headding-title text-uppercase font-weight-bold">Related Products</h2>
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-xl-3 col-lg-3 col-md-4 text-center pt-20">
-					<div class="menu-img"><a href="shop-detail.html"><img src="images/rel-1.png" alt="menu" class="menu-image"></a></div>
-					<a href="shop-detail.html" class="menu-title text-uppercase">margherita pizza</a>
-					<p class="menu-des">Lorem Ipsum is simply dummy text of the printing and typesetting industry. </p>
-					<span class="menu-price">$20.50</span>
-				</div>
-				<div class="col-xl-3 col-lg-3 col-md-4 text-center pt-20">
-					<div class="menu-img"><a href="shop-detail.html"><img src="images/rel-1.png" alt="menu" class="menu-image"></a></div>
-					<a href="shop-detail.html" class="menu-title text-uppercase">RUM WITH SODA</a>
-					<p class="menu-des">Lorem Ipsum is simply dummy text of the printing and typesetting industry. </p>
-					<span class="menu-price">$20.50</span>
-				</div>
-				<div class="col-xl-3 col-lg-3 col-md-4 text-center pt-20">
-					<div class="menu-img"><a href="shop-detail.html"><img src="images/rel-2.png" alt="menu" class="menu-image"></a></div>
-					<a href="shop-detail.html" class="menu-title text-uppercase">VEGETARIAN</a>
-					<p class="menu-des">Lorem Ipsum is simply dummy text of the printing and typesetting industry. </p>
-					<span class="menu-price">$20.50</span>
-				</div>
-				<div class="col-xl-3 col-lg-3 col-md-4 text-center pt-20">
-					<div class="menu-img"><a href="shop-detail.html"><img src="images/rel-3.png" alt="menu" class="menu-image"></a></div>
-					<a href="shop-detail.html" class="menu-title text-uppercase">PEPPERONI PIZZA</a>
-					<p class="menu-des">Lorem Ipsum is simply dummy text of the printing and typesetting industry. </p>
-					<span class="menu-price">$20.50</span>
-				</div>
-			</div>
-		</div>
-	</section>
+	
+	<!-- desc-tabbing section -->
+	<?php include "desc-tabbing.php"?>
+     <!-- releted-product section -->
+	<?php include "releted-product.php"?>
 
 	<div class="top-scrolling">
 		<a href="#header" class="scrollTo"><i class="fa fa-angle-up" aria-hidden="true"></i></a>
@@ -319,6 +149,43 @@ $products = $stmt->fetch();
 	<script src="js/script.js"></script>
 		
     <!-- script for add carts -->
-	
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+	<script>
+        var queryString = window.location.search;
+        var urlParams = new URLSearchParams(queryString);
+        var id = urlParams.get('id');
+        var isInsert = true;
+		if (id) {
+            axios.get('get-cart.php', {
+                params: {
+                    id: id
+                }
+            }).then(function(response) {
+                console.log(response.data);
+                document.getElementsByName('name')[0].value = response.data.name;
+                document.getElementsByName('quantity')[0].value = response.data.quantity;
+                document.getElementsByName('price')[0].value = response.data.price;
+            }).catch(function(error) {
+                console.log(error);
+                alert(error);
+            });
+            isInsert = false;
+        }
+        var myFunction = function(event) {
+            event.preventDefault();
+            var productId = this.getAttribute("data-product");
+            axios.post('cart.php', {
+                id: id,
+                name: document.getElementsByName('name')[0].innerHTML,
+                quantity: document.getElementsByName('quantity')[0].value,
+                price: document.getElementsByName('price')[0].innerHTML,
+            })
+};
+
+var elements = document.getElementsByClassName("add-cart");
+for (var i = 0; i < elements.length; i++) {
+    elements[i].addEventListener('click', myFunction, false);
+}
+    </script>
 </body>
 </html>
