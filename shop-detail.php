@@ -67,10 +67,10 @@ $products = $stmt->fetch();
 				<div class="col-xl-7 col-lg-7 col-md-7 mb-5">
 					<div class="shop-detail">
 						<div class="shop-name">
-							<h3 class="title-shop" name="name"> <?php  echo  $results['name'] ?></h3>
+							<h3 class="title-shop" name="name<?php echo $results['id'] ?>"> <?php  echo  $results['name'] ?></h3>
 							<div class="price-shop">
 								<span class="filter-price filter-price-r">$ 20.00  </span>
-								<span class="filter-price" name="price"><?php  echo  $results['price'] ?></span>
+								<span class="filter-price" name="price<?php echo $results['id'] ?>"><?php  echo  $results['price'] ?></span>
 							</div>
 							<p class="shop-desc"><?php  echo  $results['details'] ?></p>
 						</div>
@@ -92,10 +92,10 @@ $products = $stmt->fetch();
 						</div>
 						<div class="quantity-product">
 							<label class="quantity">Qty:</label>
-							<input type="number"  name="quantity"value="1" min="0" max="10">
+							<input type="number"  name="quantity<?php echo $results['id'] ?>"value="1" min="0" max="10">
 							
 							<!-- new button -->
-                            <a href="cart.php" class="add-cart" data-product="<?php echo $product['id']?>"><i class="fa fa-shopping-bag" aria-hidden="true"></i> Add to cart</a>
+                            <a href="cart.php" class="add-cart" data-product="<?php echo $results['id']?>"><i class="fa fa-shopping-bag" aria-hidden="true"></i> Add to cart</a>
 
 						</div>
 						<div class="wiselist">
@@ -151,40 +151,30 @@ $products = $stmt->fetch();
     <!-- script for add carts -->
 	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 	<script>
-        var queryString = window.location.search;
-        var urlParams = new URLSearchParams(queryString);
-        var id = urlParams.get('id');
-        var isInsert = true;
-		if (id) {
-            axios.get('get-cart.php', {
-                params: {
-                    id: id
-                }
-            }).then(function(response) {
-                console.log(response.data);
-                document.getElementsByName('name')[0].value = response.data.name;
-                document.getElementsByName('quantity')[0].value = response.data.quantity;
-                document.getElementsByName('price')[0].value = response.data.price;
-            }).catch(function(error) {
-                console.log(error);
-                alert(error);
-            });
-            isInsert = false;
-        }
+     
         var myFunction = function(event) {
             event.preventDefault();
-            var productId = this.getAttribute("data-product");
+            var pid = this.getAttribute("data-product");
             axios.post('cart.php', {
-                id: id,
-                name: document.getElementsByName('name')[0].innerHTML,
-                quantity: document.getElementsByName('quantity')[0].value,
-                price: document.getElementsByName('price')[0].innerHTML,
+                pid: pid,
+                name: document.getElementsByName('name<?php echo $results['id'] ?>')[0].innerHTML,
+                quantity: document.getElementsByName('quantity<?php echo $results['id'] ?>')[0].value,
+                price: document.getElementsByName('price<?php echo $results['id'] ?>')[0].innerHTML,
             })
+			.then(function(response) {
+                        
+                        alert('data inserted - '+ response.data + pid);
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+                        alert('error');
+                    });
 };
 
 var elements = document.getElementsByClassName("add-cart");
 for (var i = 0; i < elements.length; i++) {
     elements[i].addEventListener('click', myFunction, false);
+	
 }
     </script>
 </body>
